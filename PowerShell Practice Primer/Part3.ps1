@@ -155,7 +155,7 @@ Invoke-RestMethod -Uri "https://jdhitsolutions.com/blog/feed/" | Select-Object t
 
 #Ex 21
 
-$env1 = Invoke-RestMethod -Uri "https://jdhitsolutions.com/blog/feed/" | Select-Object title,link,
+Invoke-RestMethod -Uri "https://jdhitsolutions.com/blog/feed/" | Select-Object title,link,
 @{n='Publication Date';e={($_.pubDate.ToString()) | Get-date}} | Out-GridView
 
 #Ex 22
@@ -170,6 +170,7 @@ Get-DnsClientCache | Where-Object {$_.Type -ne "AAAA"} | Select-Object @{n='Comp
 
 $MyName = "Lucas"
 $MyBirthday = "4/25/1991, 8:45AM"
+
 #
 $MyBirthdayVar = $MyBirthday | Get-Date
 $MyAge = ((Get-Date).Year) - (($MyBirthdayVar).Year)
@@ -186,4 +187,4 @@ Write-Host ("$MyName, You were born in $MyBirthdayVar, the day of the week was $
 
 # Ex 25
 
-Get-Process | Where-Object {$_.Company -notlike "*Microsoft*"} | fl *
+Get-Process | Where-Object {$_.Company -notlike "*Microsoft*"}

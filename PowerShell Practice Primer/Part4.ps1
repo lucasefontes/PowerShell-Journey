@@ -38,3 +38,14 @@ Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object CSName,LastBoot
 
 #Ex 6
 
+Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object `
+@{n="ComputerName";e={$_.CSName}},
+@{n="FreeVirtualMemoryGB";e={[math]::round($_.FreeVirtualMemory / 1MB,2)}},
+@{n="FreePhysicalMemoryGB";e={[math]::round($_.FreePhysicalMemory / 1MB,2)}},
+@{n="TotalVirtualMemorySizeGB";e={[math]::round($_.TotalVirtualMemorySize / 1MB,2)}},
+@{n="TotalVisibleMemorySizeGB";e={[math]::round($_.TotalVisibleMemorySize / 1MB,2)}}
+
+#Ex 7
+
+
+
