@@ -1,7 +1,6 @@
-$MyName = "Lucas"
-$MyBirthday = "4/25/1991, 8:45AM"
+$MyName = Read-Host ("Type your Name")
+$MyBirthday = Read-Host ("Type your birthday and time born(if known) eg: 4/25/1991, 8:45AM")
 
-#
 $MyBirthdayVar = $MyBirthday | Get-Date
 $MyAge = ((Get-Date).Year) - (($MyBirthdayVar).Year)
 $TimeSpan = (Get-Date) -  $MyBirthdayVar
