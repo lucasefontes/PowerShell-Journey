@@ -47,5 +47,66 @@ Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object `
 
 #Ex 7
 
+Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object `
+@{n="ComputerName";e={$_.CSName}},
+@{n="FreeVirtualMemoryGB";e={[math]::round($_.FreeVirtualMemory / 1MB,2)}},
+@{n="FreePhysicalMemoryGB";e={[math]::round($_.FreePhysicalMemory / 1MB,2)}},
+@{n="TotalVirtualMemorySizeGB";e={[math]::round($_.TotalVirtualMemorySize / 1MB,2)}},
+@{n="TotalPhysicalMemorySizeGB";e={[math]::round($_.TotalVisibleMemorySize / 1MB,2)}},
+@{n="Free Percentage of TotalPhisicalMemorySizeGB";e={[math]::round(($_.FreePhysicalMemory) / ($_.TotalVisibleMemorySize / 100),2)}},
+@{n="Free Percentage of TotalVirtualMemorySizeGB";e={[math]::round(($_.FreeVirtualMemory) / ($_.TotalVirtualMemorySize / 100),2)}}
 
+#Ex 8
 
+Get-CimInstance -Classname Win32_Service | Sort-Object StartName,DisplayName | Format-Table -GroupBy StartName -Property Name,DisplayName,StartMode
+
+#EX 9
+
+Get-CimInstance -ClassName Win32_LogicalDisk | Select-Object Name,Size,@{n="FreeSpaceGB";e={$_.FreeSpace / 1GB}}
+
+#Ex 10
+
+Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntiVirusProduct
+
+#EX 11
+
+Get-CimInstance -ClassName Win32_NTEventlogFile | Select-Object -Property LogfileName,Path,LastModified,NumberOfRecords,MaxFileSize,
+@{n="FileSize";e={[math]::Round($_.FileSize)}},
+@{n="PercentageOfLogInUse";e={[math]::Round(($_.FileSize) / ($_.MaxFileSize) * 100,2)}}
+
+#EX 12
+
+Get-CimInstance win32_group -filter "name = 'administrators' AND `
+LocalAccount = 'true'" |
+Get-CimAssociatedInstance -ResultClassName win32_useraccount
+
+#EX 13
+
+$users = Get-CimInstance win32_group -filter "name = 'administrators' AND LocalAccount = 'true'" | Get-CimAssociatedInstance -ResultClassName win32_useraccount
+
+$groups = Get-CimInstance win32_group -filter "name = 'administrators'" | Get-CimAssociatedInstance -ResultClassName win32_group
+
+$users
+$groups
+
+Get-CimInstance win32_group -filter "name = 'administrators' AND `
+LocalAccount = 'true'" |
+Get-CimAssociatedInstance | Where-Object {$_.CimClass -match "User|Group"} |
+Select-Object -property Name,Domain,Caption,SID,CimClass
+
+#EX 14
+
+Get-Command -CommandType Cmdlet,Function -ParameterName CimSession
+
+#Ex 15
+
+Get-CimInstance -ClassName Win32_DiskPartition
+
+Get-Partition -DriveLetter C | Select-Object DriveLetter,PartitionNumber,
+@{n="SizeGB";e={$_.Size / 1GB}},GptType
+
+#EX 16
+
+$session = New-CimSession -Credential lfontes\Administrator -ComputerName WIN-E7LV0QT74KB,WIN-10JBE3JRVLE,WIN-FGA22D0NIAO
+
+Get-CimInstance -CimSession $session Win32_Processor | Select-Object Name,SystemName,Status,Description,LoadPercentage,Manufacturer
