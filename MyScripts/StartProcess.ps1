@@ -4,6 +4,7 @@ for ($i = 1; $i -le 20; $i++)
     Write-Progress -SecondsRemaining $i -Activity "Waiting for $i seconds before running the script" -PercentComplete $percentage -Status "$percentage% completed."
     Start-Sleep -Seconds 1
 }
+Write-Progress -Activity "Waiting completed" -Completed
 
 Start-Process -FilePath C:\Windows\System32\PresentationSettings.exe /start
 
