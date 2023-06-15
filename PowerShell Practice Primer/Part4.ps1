@@ -107,6 +107,19 @@ Get-Partition -DriveLetter C | Select-Object DriveLetter,PartitionNumber,
 
 #EX 16
 
-$session = New-CimSession -Credential lfontes\Administrator -ComputerName WIN-E7LV0QT74KB,WIN-10JBE3JRVLE,WIN-FGA22D0NIAO
+$session = New-CimSession -Credential lfontes\Administrator -ComputerName WIN-E7LV0QT74KB,WIN-10JBE3JRVLE,WIN-C1RO5A3QSSH
 
 Get-CimInstance -CimSession $session Win32_Processor | Select-Object Name,SystemName,Status,Description,LoadPercentage,Manufacturer
+
+#Ex 17
+
+Get-CimInstance -ClassName Win32_LogicalDisk | Select-Object SystemName,DeviceID,Name,Size,
+@{n="FreeSpaceGB";e={$_.FreeSpace / 1GB}}
+
+_______________________________________
+
+Get-CimSession | Get-CimInstance -ClassName Win32_LogicalDisk -Filter "drivetype=3" |
+Select-Object -property @{Name="Computername";Expression={$_.Systemname}},DeviceID,VolumeName,
+@{Name="SizeGB";Expression={$_.Size/1gb -as [int]}},
+@{Name="FreeGB";Expression={$_.Freespace/1gb -as [int]}},
+@{Name="PctFree";Expression = {($_.Freespace/$_.size)*100}}

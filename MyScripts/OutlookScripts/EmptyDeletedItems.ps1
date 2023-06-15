@@ -27,7 +27,8 @@ while ($i -le 9){
     $Items | ForEach-Object {$_.Delete()}
 
     #Times script was processed
-    Write-Host ("Script was processed $i time(s)")
+    #Write-Host ("Script was processed $i time(s)")
+    Write-Progress -Activity "Script ran $i times"
 
     $olApp.Quit | Out-Null
     [GC]::Collect()
