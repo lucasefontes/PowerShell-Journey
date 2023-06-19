@@ -3,10 +3,14 @@ the loop seems to be stopped in the middle and it does not go through all items 
 However for now I worked around it using the loop.
 #>
 
-$i = 0
-while ($i -le 9){
-    $i++
+for ($i = 0; $i -le 10; $i++) 
+{
+
+    $percentage = $i * 10
     $olApp = New-Object -ComObject outlook.application
+
+    #Times script was processed
+    Write-Progress -Activity "Script ran $i times" -Status "$percentage% completed"
     $namespace = $olApp.GetNamespace("MAPI")
 
     #Get the name space and the Deleted Items folder(the number 3)
@@ -26,10 +30,8 @@ while ($i -le 9){
     #Delete everything
     $Items | ForEach-Object {$_.Delete()}
 
-    #Times script was processed
-    #Write-Host ("Script was processed $i time(s)")
-    Write-Progress -Activity "Script ran $i times"
-
     $olApp.Quit | Out-Null
     [GC]::Collect()
 }
+Write-Progress -Activity "Waiting completed" -Completed
+Clear-Host
